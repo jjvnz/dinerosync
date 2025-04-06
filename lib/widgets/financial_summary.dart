@@ -12,7 +12,7 @@ class FinancialSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final financeProvider = Provider.of<FinanceProvider>(context);
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Column(
       children: [
         Card(
@@ -34,8 +34,8 @@ class FinancialSummary extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.info_outline, 
-                        color: colorScheme.onSurface.withValues(alpha: 0.6)),
+                      icon: Icon(Icons.info_outline,
+                        color: colorScheme.onSurface.withAlpha(153)),
                       onPressed: () => _showSummaryInfo(context),
                       iconSize: 20,
                       padding: EdgeInsets.zero,
@@ -63,12 +63,12 @@ class FinancialSummary extends StatelessWidget {
                     _SummaryItem(
                       title: 'Balance',
                       amount: financeProvider.balance,
-                      color: financeProvider.balance >= 0 
-                        ? Colors.green 
-                        : Colors.red,
-                      icon: financeProvider.balance >= 0 
-                        ? Icons.trending_up 
-                        : Icons.trending_down,
+                      color: financeProvider.balance >= 0
+                          ? Colors.green
+                          : Colors.red,
+                      icon: financeProvider.balance >= 0
+                          ? Icons.trending_up
+                          : Icons.trending_down,
                     ),
                   ],
                 ),
@@ -97,7 +97,7 @@ class FinancialSummary extends StatelessWidget {
                 SizedBox(
                   height: 200,
                   child: _ExpensesChart(
-                    expensesByCategory: financeProvider.expensesByCategory),
+                      expensesByCategory: financeProvider.expensesByCategory),
                 ),
               ],
             ),
@@ -113,9 +113,9 @@ class FinancialSummary extends StatelessWidget {
       builder: (context) => AlertDialog(
         title: const Text('Información del Resumen'),
         content: const Text(
-          'Este resumen muestra tus ingresos, gastos y balance total '
-          'según el período seleccionado. Los gráficos muestran cómo se '
-          'distribuyen tus gastos por categoría.'),
+            'Este resumen muestra tus ingresos, gastos y balance total '
+            'según el período seleccionado. Los gráficos muestran cómo se '
+            'distribuyen tus gastos por categoría.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -133,7 +133,7 @@ class _VerticalDivider extends StatelessWidget {
     return Container(
       width: 1,
       height: 40,
-      color: Theme.of(context).dividerColor.withValues(alpha: 0.2),
+      color: Theme.of(context).dividerColor.withAlpha(51),
       margin: const EdgeInsets.symmetric(horizontal: 8),
     );
   }
@@ -161,7 +161,7 @@ class _SummaryItem extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.0),
+              color: color.withAlpha(0),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: color, size: 20),
@@ -169,7 +169,7 @@ class _SummaryItem extends StatelessWidget {
           const SizedBox(height: 8),
           Text(title,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+              color: Theme.of(context).colorScheme.onSurface.withAlpha(153),
             ),
           ),
           const SizedBox(height: 4),
@@ -201,11 +201,11 @@ class _ExpensesChart extends StatelessWidget {
           children: [
             Icon(Icons.pie_chart_outline,
               size: 48,
-              color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.5)),
+              color: Theme.of(context).colorScheme.outline.withAlpha(128)),
             const SizedBox(height: 16),
             Text('No hay datos de gastos',
               style: TextStyle(
-                color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.7),
+                color: Theme.of(context).colorScheme.outline.withAlpha(179),
               ),
             ),
           ],
@@ -241,8 +241,8 @@ class _ExpensesChart extends StatelessWidget {
           xValueMapper: (ChartData data, _) => data.category,
           yValueMapper: (ChartData data, _) => data.amount,
           pointColorMapper: (ChartData data, _) => data.color,
-          dataLabelMapper: (ChartData data, _) => 
-            '${(data.amount / expensesByCategory.values.fold(0, (a, b) => a + b) * 100).toStringAsFixed(0)}%',
+          dataLabelMapper: (ChartData data, _) =>
+              '${(data.amount / expensesByCategory.values.fold(0, (a, b) => a + b) * 100).toStringAsFixed(0)}%',
           dataLabelSettings: DataLabelSettings(
             isVisible: true,
             labelPosition: ChartDataLabelPosition.inside,
