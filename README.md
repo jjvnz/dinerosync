@@ -1,16 +1,56 @@
-# dinerosync
+# Dinerosync
 
-A new Flutter project.
+**Dinerosync** es una aplicación móvil de finanzas personales construida con Flutter. Permite a los usuarios registrar, visualizar y gestionar ingresos y gastos de forma sencilla y visualmente atractiva.
 
-## Getting Started
+## ✨ Características
 
-This project is a starting point for a Flutter application.
+* 📥 Registro de transacciones (ingresos/gastos)
+* 📅 Filtro por rango de fechas
+* 📊 Resumen financiero interactivo
+* 💾 Almacenamiento local con Hive
+* 🎨 Modo claro y oscuro
+* 🔄 Actualización en tiempo real con Provider
 
-A few resources to get you started if this is your first Flutter project:
+## 📸 Capturas de pantalla
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+*(Agrega aquí imágenes de tu app si lo deseas)*
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🚀 Instalación
+
+1. Clona el repositorio:
+
+   ```bash
+   git clone https://github.com/tu_usuario/dinerosync.git
+   cd dinerosync
+   ```
+
+2. Instala las dependencias:
+
+   ```bash
+   flutter pub get
+   ```
+
+3. Ejecuta la app en un emulador o dispositivo físico:
+
+   ```bash
+   flutter run
+   ```
+
+## 🧰 Tecnologías usadas
+
+* [Flutter](https://flutter.dev/)
+* [Hive](https://docs.hivedb.dev/)
+* [Provider](https://pub.dev/packages/provider)
+* [intl](https://pub.dev/packages/intl)
+
+## 📁 Estructura del proyecto
+
+* `/models`: Definición de modelos como `Transaction` y `Category`.
+* `/providers`: Lógica y gestión del estado de la app (`FinanceProvider`).
+* `/widgets`: Componentes reutilizables como formularios y listas.
+* `main.dart`: Punto de entrada y configuración principal de la app.
+
+## 📝 Licencia
+
+Este proyecto está bajo la licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+
