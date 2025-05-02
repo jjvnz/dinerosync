@@ -243,10 +243,10 @@ class _ExpensesChart extends StatelessWidget {
           pointColorMapper: (ChartData data, _) => data.color,
           dataLabelMapper: (ChartData data, _) =>
               '${(data.amount / expensesByCategory.values.fold(0, (a, b) => a + b) * 100).toStringAsFixed(0)}%',
-          dataLabelSettings: DataLabelSettings(
+          dataLabelSettings: const DataLabelSettings(
             isVisible: true,
             labelPosition: ChartDataLabelPosition.inside,
-            textStyle: const TextStyle(
+            textStyle: TextStyle(
               color: Colors.white,
               fontSize: 12,
               fontWeight: FontWeight.bold,

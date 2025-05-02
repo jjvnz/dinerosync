@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return CustomScrollView(
       slivers: [
-        SliverToBoxAdapter(
+        const SliverToBoxAdapter(
           child: FinancialSummary(),
         ),
         SliverPadding(
@@ -169,14 +169,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildEmptyState() {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(Icons.receipt_long, size: 60),
-        const SizedBox(height: 16),
-        const Text('No hay transacciones registradas'),
-        const SizedBox(height: 8),
-        const Text('Presiona el botón + para agregar una'),
+        SizedBox(height: 16),
+        Text('No hay transacciones registradas'),
+        SizedBox(height: 8),
+        Text('Presiona el botón + para agregar una'),
       ],
     );
   }
