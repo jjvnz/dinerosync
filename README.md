@@ -17,7 +17,7 @@
 1. Clone the repository:  
 
    ```bash  
-   git clone https://github.com/your_username/dinerosync.git  
+   git clone https://github.com/jjvnz/dinerosync.git  
    cd dinerosync  
    ```  
 
