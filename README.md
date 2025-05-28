@@ -51,8 +51,6 @@
 * `main.dart`: Punto de entrada y configuración principal de la app.
 
 
-## UI
-
 <h2 style="text-align: center; margin-bottom: 30px; color: #333; font-family: Arial, sans-serif;">
   📱 UI - Dinerosync
 </h2>
