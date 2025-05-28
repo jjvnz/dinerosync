@@ -39,7 +39,7 @@
 ## 🧰 Tecnologías usadas
 
 * [Flutter](https://flutter.dev/)
-* [Hive](https://docs.hivedb.dev/)
+* [Hive](https://github.com/isar/hive)
 * [Provider](https://pub.dev/packages/provider)
 * [intl](https://pub.dev/packages/intl)
 
