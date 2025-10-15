@@ -23,11 +23,35 @@ class TransactionFormState extends State<TransactionForm> {
   Category _selectedCategory = Category.food;
   DateTime _selectedDate = DateTime.now();
   bool _isSubmitting = false;
+  final NumberFormat _currencyFormat = NumberFormat.decimalPattern('es_ES');
 
   @override
   void initState() {
     super.initState();
     _updateFormFields();
+    _amountController.addListener(_formatAmount);
+  }
+
+  void _formatAmount() {
+    final String text = _amountController.text;
+
+    if (text.isEmpty) {
+      return;
+    }
+
+    try {
+      final double value = _currencyFormat.parse(text).toDouble();
+      final String formattedText = _currencyFormat.format(value);
+
+      if (text != formattedText) {
+        _amountController.value = TextEditingValue(
+          text: formattedText,
+          selection: TextSelection.collapsed(offset: formattedText.length),
+        );
+      }
+    } catch (e) {
+      // Ignora errores de entrada temporal.
+    }
   }
 
   void _updateFormFields() {
@@ -36,7 +60,7 @@ class TransactionFormState extends State<TransactionForm> {
       _selectedType = transaction.type;
       _selectedCategory = transaction.category;
       _selectedDate = transaction.date;
-      _amountController.text = transaction.amount.toStringAsFixed(2);
+      _amountController.text = _currencyFormat.format(transaction.amount);
       _descriptionController.text = transaction.description;
     } else {
       _amountController.clear();
@@ -54,6 +78,7 @@ class TransactionFormState extends State<TransactionForm> {
 
   @override
   void dispose() {
+    _amountController.removeListener(_formatAmount);
     _amountController.dispose();
     _descriptionController.dispose();
     super.dispose();
@@ -155,9 +180,12 @@ class TransactionFormState extends State<TransactionForm> {
       ),
       validator: (value) {
         if (value == null || value.isEmpty) return 'Ingrese un monto';
-        final amount = double.tryParse(value);
-        if (amount == null) return 'Monto inválido';
-        if (amount <= 0) return 'El monto debe ser mayor a cero';
+        try {
+          final amount = _currencyFormat.parse(value).toDouble();
+          if (amount <= 0) return 'El monto debe ser mayor a cero';
+        } catch (e) {
+          return 'Monto inválido';
+        }
         return null;
       },
     );
@@ -306,7 +334,7 @@ class TransactionFormState extends State<TransactionForm> {
     setState(() => _isSubmitting = true);
 
     try {
-      final amount = double.tryParse(_amountController.text) ?? 0;
+      final amount = _currencyFormat.parse(_amountController.text).toDouble();
       final transaction = Transaction(
         id: widget.transaction?.id ?? const Uuid().v4(),
         type: _selectedType,
