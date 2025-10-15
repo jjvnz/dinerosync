@@ -9,6 +9,10 @@ import 'widgets/transaction_form.dart';
 import 'widgets/financial_summary.dart';
 import 'widgets/transaction_item.dart';
 
+/// Entry point of the Dinerosync application.
+///
+/// Initializes Hive database, registers type adapters for data models,
+/// and sets up the provider architecture before launching the app.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
@@ -26,9 +30,18 @@ void main() async {
   );
 }
 
+/// Root widget of the Dinerosync application.
+///
+/// Configures the Material Design theme, dark mode support,
+/// and sets up the main navigation structure.
 class MyApp extends StatelessWidget {
+  /// Creates the root application widget.
   const MyApp({super.key});
 
+  /// Builds the application with theme configuration and routing.
+  ///
+  /// Sets up Material Design 3 theming with custom color schemes
+  /// for both light and dark modes.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -80,14 +93,26 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Main screen of the application displaying financial data.
+///
+/// Shows transaction list, financial summary, and provides access
+/// to transaction management features like adding, filtering, and viewing.
 class HomeScreen extends StatefulWidget {
+  /// Creates the home screen widget.
   const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+/// State class for [HomeScreen].
+///
+/// Manages the UI state and user interactions for the main screen.
 class _HomeScreenState extends State<HomeScreen> {
+  /// Builds the home screen interface.
+  ///
+  /// Creates the app bar, transaction list, and floating action button
+  /// with proper state management through [FinanceProvider].
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,6 +151,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  /// Builds the date filter chip widget.
+  ///
+  /// Shows the current date range filter if active, with an option
+  /// to remove the filter. Returns empty widget if no filter is set.
   Widget _buildDateFilterChip(FinanceProvider provider) {
     final filter = provider.dateFilter;
     if (filter == null) return const SizedBox.shrink();
@@ -143,6 +172,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  /// Builds the main transaction list or empty state.
+  ///
+  /// Returns either a scrollable list with financial summary and
+  /// transactions, or an empty state message when no data exists.
   Widget _buildTransactionList(FinanceProvider provider) {
     if (provider.transactions.isEmpty) {
       return Center(child: _buildEmptyState());
@@ -164,6 +197,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  /// Builds the empty state widget when no transactions exist.
+  ///
+  /// Shows an icon, message, and instructions to encourage users
+  /// to add their first transaction.
   Widget _buildEmptyState() {
     return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -177,6 +214,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  /// Shows the date range picker dialog.
+  ///
+  /// Allows users to select a date range for filtering transactions.
+  /// Updates the [FinanceProvider] with the selected range.
   Future<void> _selectDateRange(BuildContext context) async {
     final financeProvider = Provider.of<FinanceProvider>(
       context,
@@ -194,6 +235,10 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  /// Shows the transaction form in a modal bottom sheet.
+  ///
+  /// Displays [TransactionForm] for creating new transactions or
+  /// editing existing ones when [transaction] is provided.
   void _showTransactionForm(BuildContext context, {Transaction? transaction}) {
     showModalBottomSheet(
       context: context,

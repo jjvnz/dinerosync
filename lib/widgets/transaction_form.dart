@@ -6,25 +6,56 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
+/// Form widget for creating and editing transactions.
+///
+/// Provides input fields for amount, description, category, type, and date.
+/// When [transaction] is provided, the form operates in edit mode,
+/// otherwise it creates a new transaction.
 class TransactionForm extends StatefulWidget {
+  /// The transaction to edit, or null to create a new one.
   final Transaction? transaction;
 
+  /// Creates a new transaction form.
+  ///
+  /// If [transaction] is provided, the form will be pre-filled with
+  /// the transaction's data for editing.
   const TransactionForm({super.key, this.transaction});
 
   @override
   TransactionFormState createState() => TransactionFormState();
 }
 
+/// State class for [TransactionForm].
+///
+/// Manages form validation, input formatting, and transaction submission.
 class TransactionFormState extends State<TransactionForm> {
+  /// Form key for validation.
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  
+  /// Controller for the amount input field.
   final TextEditingController _amountController = TextEditingController();
+  
+  /// Controller for the description input field.
   final TextEditingController _descriptionController = TextEditingController();
+  
+  /// Currently selected transaction type.
   TransactionType _selectedType = TransactionType.expense;
+  
+  /// Currently selected category.
   Category _selectedCategory = Category.food;
+  
+  /// Currently selected date and time.
   DateTime _selectedDate = DateTime.now();
+  
+  /// Whether the form is currently being submitted.
   bool _isSubmitting = false;
+  
+  /// Number formatter for currency display.
   final NumberFormat _currencyFormat = NumberFormat.decimalPattern('es_ES');
 
+  /// Initializes the form state.
+  ///
+  /// Sets up form fields and adds listeners for amount formatting.
   @override
   void initState() {
     super.initState();
@@ -32,6 +63,9 @@ class TransactionFormState extends State<TransactionForm> {
     _amountController.addListener(_formatAmount);
   }
 
+  /// Formats the amount input as the user types.
+  ///
+  /// Applies currency formatting to maintain consistent number display.
   void _formatAmount() {
     final String text = _amountController.text;
 
@@ -50,10 +84,14 @@ class TransactionFormState extends State<TransactionForm> {
         );
       }
     } catch (e) {
-      // Ignora errores de entrada temporal.
+      // Ignore temporary input errors.
     }
   }
 
+  /// Updates form fields with transaction data.
+  ///
+  /// Populates all form fields when editing an existing transaction,
+  /// or clears them when creating a new one.
   void _updateFormFields() {
     final transaction = widget.transaction;
     if (transaction != null) {
@@ -68,6 +106,9 @@ class TransactionFormState extends State<TransactionForm> {
     }
   }
 
+  /// Updates form fields when the widget is rebuilt with different data.
+  ///
+  /// Refreshes form fields if the [transaction] property changes.
   @override
   void didUpdateWidget(covariant TransactionForm oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -76,6 +117,9 @@ class TransactionFormState extends State<TransactionForm> {
     }
   }
 
+  /// Cleans up resources when the widget is disposed.
+  ///
+  /// Removes listeners and disposes of text controllers.
   @override
   void dispose() {
     _amountController.removeListener(_formatAmount);
@@ -84,6 +128,10 @@ class TransactionFormState extends State<TransactionForm> {
     super.dispose();
   }
 
+  /// Builds the transaction form interface.
+  ///
+  /// Creates a scrollable form with input fields for all transaction
+  /// properties and handles form submission.
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -133,6 +181,10 @@ class TransactionFormState extends State<TransactionForm> {
     );
   }
 
+  /// Builds the transaction type selector.
+  ///
+  /// Creates a segmented button to choose between income and expense
+  /// with appropriate colors for each type.
   Widget _buildTypeSelector(Color surfaceVariant) {
     return SegmentedButton<TransactionType>(
       segments: const [
@@ -166,6 +218,10 @@ class TransactionFormState extends State<TransactionForm> {
     );
   }
 
+  /// Builds the amount input field.
+  ///
+  /// Creates a validated text field with currency formatting and
+  /// numeric keyboard input.
   Widget _buildAmountField(Color surfaceVariantLight) {
     return TextFormField(
       controller: _amountController,
@@ -191,6 +247,10 @@ class TransactionFormState extends State<TransactionForm> {
     );
   }
 
+  /// Builds the category selection dropdown.
+  ///
+  /// Creates a dropdown with all available categories, showing
+  /// icons and names for each option.
   Widget _buildCategoryDropdown(Color surfaceVariantLight) {
     return DropdownButtonFormField<Category>(
       initialValue: _selectedCategory,
@@ -221,6 +281,10 @@ class TransactionFormState extends State<TransactionForm> {
     );
   }
 
+  /// Builds the description input field.
+  ///
+  /// Creates a validated text field for transaction description
+  /// with character limit and minimum length validation.
   Widget _buildDescriptionField(Color surfaceVariantLight) {
     return TextFormField(
       controller: _descriptionController,
@@ -240,6 +304,10 @@ class TransactionFormState extends State<TransactionForm> {
     );
   }
 
+  /// Builds the date and time selector.
+  ///
+  /// Creates a tappable container that shows the selected date
+  /// and opens a date picker when tapped.
   Widget _buildDateSelector(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -276,6 +344,10 @@ class TransactionFormState extends State<TransactionForm> {
     );
   }
 
+  /// Builds the form submission button.
+  ///
+  /// Creates an elevated button that validates and submits the form,
+  /// with loading state during submission.
   Widget _buildSubmitButton(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 

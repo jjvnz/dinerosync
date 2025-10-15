@@ -5,9 +5,19 @@ import '../providers/finance_provider.dart';
 import '../models/category.dart';
 import '../utils/number_formatter.dart';
 
+/// Widget that displays a comprehensive financial summary.
+///
+/// Shows income, expenses, balance, and expense distribution chart
+/// based on data from [FinanceProvider]. Includes an information
+/// dialog to explain the summary components.
 class FinancialSummary extends StatelessWidget {
+  /// Creates a new financial summary widget.
   const FinancialSummary({super.key});
 
+  /// Builds the financial summary interface.
+  ///
+  /// Creates two cards: one with income/expenses/balance summary
+  /// and another with expense distribution chart.
   @override
   Widget build(BuildContext context) {
     final financeProvider = Provider.of<FinanceProvider>(context);
@@ -107,6 +117,10 @@ class FinancialSummary extends StatelessWidget {
     );
   }
 
+  /// Shows an information dialog explaining the summary.
+  ///
+  /// Displays details about what the financial summary represents
+  /// and how the data is calculated.
   void _showSummaryInfo(BuildContext context) {
     showDialog(
       context: context,
@@ -127,7 +141,11 @@ class FinancialSummary extends StatelessWidget {
   }
 }
 
+/// Private widget that creates a vertical divider line.
+///
+/// Used to separate summary items in the financial overview.
 class _VerticalDivider extends StatelessWidget {
+  /// Builds a thin vertical line with theme-appropriate color.
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -139,12 +157,25 @@ class _VerticalDivider extends StatelessWidget {
   }
 }
 
+/// Private widget that displays a single financial summary item.
+///
+/// Shows an icon, title, and formatted amount with consistent styling.
 class _SummaryItem extends StatelessWidget {
+  /// The display title for this summary item.
   final String title;
+  
+  /// The monetary amount to display.
   final double amount;
+  
+  /// The color theme for the icon and amount text.
   final Color color;
+  
+  /// The icon to display above the title.
   final IconData icon;
 
+  /// Creates a new summary item.
+  ///
+  /// All parameters are required to properly display the financial data.
   const _SummaryItem({
     required this.title,
     required this.amount,
@@ -152,6 +183,9 @@ class _SummaryItem extends StatelessWidget {
     required this.icon,
   });
 
+  /// Builds the summary item with icon, title, and amount.
+  ///
+  /// Creates a column layout with consistent spacing and theming.
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -187,11 +221,23 @@ class _SummaryItem extends StatelessWidget {
   }
 }
 
+/// Private widget that displays expense distribution as a doughnut chart.
+///
+/// Shows expenses grouped by category with percentages and tooltips.
+/// Displays an empty state when no expense data is available.
 class _ExpensesChart extends StatelessWidget {
+  /// Map of categories to their total expense amounts.
   final Map<Category, double> expensesByCategory;
 
+  /// Creates a new expenses chart.
+  ///
+  /// Requires [expensesByCategory] data to generate the visualization.
   const _ExpensesChart({required this.expensesByCategory});
 
+  /// Builds the expense distribution chart.
+  ///
+  /// Returns either a doughnut chart with expense data or an empty
+  /// state message when no expenses are available.
   @override
   Widget build(BuildContext context) {
     if (expensesByCategory.isEmpty) {
@@ -269,11 +315,25 @@ class _ExpensesChart extends StatelessWidget {
   }
 }
 
+/// Data model for chart visualization.
+///
+/// Represents a single data point in the expense distribution chart
+/// with category information, amount, and visual styling.
 class ChartData {
+  /// The category name for display.
   final String category;
+  
+  /// The expense amount for this category.
   final double amount;
+  
+  /// The color to use for this data point.
   final Color color;
+  
+  /// The icon associated with this category.
   final IconData icon;
 
+  /// Creates chart data for a category.
+  ///
+  /// All parameters are required for proper chart rendering.
   ChartData(this.category, this.amount, this.color, this.icon);
 }
