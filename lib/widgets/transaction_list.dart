@@ -4,9 +4,18 @@ import 'package:provider/provider.dart';
 import '../providers/finance_provider.dart';
 import 'transaction_item.dart';
 
+/// Widget that displays a list of transactions.
+///
+/// Shows all transactions from [FinanceProvider] in a scrollable list.
+/// Displays an empty state when no transactions are available.
 class TransactionList extends StatelessWidget {
+  /// Creates a new transaction list widget.
   const TransactionList({super.key});
 
+  /// Builds the transaction list interface.
+  ///
+  /// Returns either an empty state or a list of [TransactionItem] widgets
+  /// based on the availability of transactions in [FinanceProvider].
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -23,6 +32,10 @@ class TransactionList extends StatelessWidget {
     );
   }
 
+  /// Builds the empty state widget when no transactions exist.
+  ///
+  /// Shows a card with an icon, message, and action button to encourage
+  /// users to add their first transaction.
   Widget _buildEmptyState(ThemeData theme, ColorScheme colorScheme) {
     final emptyStateColor = Color.alphaBlend(
       colorScheme.outline.withAlpha(127),
@@ -78,6 +91,10 @@ class TransactionList extends StatelessWidget {
     );
   }
 
+  /// Builds the list of transaction items.
+  ///
+  /// Creates a scrollable list with a header and [TransactionItem] widgets
+  /// for each transaction in the provided [transactions] list.
   Widget _buildTransactionList(List<Transaction> transactions, ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

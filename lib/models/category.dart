@@ -3,23 +3,45 @@ import 'package:hive/hive.dart';
 
 part 'category.g.dart';
 
+/// Enumeration of transaction categories.
+///
+/// Defines the available categories for classifying transactions
+/// with Hive serialization support for local storage.
 @HiveType(typeId: 2)
 enum Category {
+  /// Food and dining expenses.
   @HiveField(0)
   food,
+  
+  /// Transportation and travel costs.
   @HiveField(1)
   transportation,
+  
+  /// Entertainment and leisure activities.
   @HiveField(2)
   entertainment,
+  
+  /// Housing and accommodation expenses.
   @HiveField(3)
   housing,
+  
+  /// Salary and income sources.
   @HiveField(4)
   salary,
+  
+  /// Miscellaneous transactions not fitting other categories.
   @HiveField(5)
   other
 }
 
+/// Extension that provides display properties for [Category] enum.
+///
+/// Adds localized names, icons, and colors for each category
+/// to support consistent UI presentation throughout the app.
 extension CategoryExtension on Category {
+  /// The localized display name for this category.
+  ///
+  /// Returns Spanish names for each category value.
   String get name {
     switch (this) {
       case Category.food:
@@ -37,6 +59,10 @@ extension CategoryExtension on Category {
     }
   }
 
+  /// The icon associated with this category.
+  ///
+  /// Returns Material Design icons that visually represent
+  /// each category type.
   IconData get icon {
     switch (this) {
       case Category.food:
@@ -54,6 +80,10 @@ extension CategoryExtension on Category {
     }
   }
 
+  /// The color theme for this category.
+  ///
+  /// Returns distinct colors for each category to provide
+  /// visual differentiation in charts and UI elements.
   Color get color {
     switch (this) {
       case Category.food:

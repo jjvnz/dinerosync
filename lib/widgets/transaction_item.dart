@@ -7,11 +7,24 @@ import '../providers/finance_provider.dart';
 import 'transaction_form.dart';
 import '../utils/number_formatter.dart';
 
+/// Widget that represents a transaction item in the list.
+///
+/// Displays [Transaction] information in an interactive card that allows
+/// viewing details, editing, and deleting the transaction through
+/// swipe gestures.
 class TransactionItem extends StatelessWidget {
+  /// The transaction to be displayed in this item.
   final Transaction transaction;
 
+  /// Creates a new transaction item.
+  ///
+  /// Requires a valid [transaction] to display its information.
   const TransactionItem({super.key, required this.transaction});
 
+  /// Builds the visual interface of the transaction item.
+  ///
+  /// Creates a swipeable card that displays transaction information
+  /// with differentiated colors based on type (income/expense).
   @override
   Widget build(BuildContext context) {
     final isIncome = transaction.type == TransactionType.income;
@@ -153,6 +166,10 @@ class TransactionItem extends StatelessWidget {
     );
   }
 
+  /// Builds the visual background for the swipe gesture.
+  ///
+  /// Shows a visual deletion indicator when the user swipes the item.
+  /// The [isSecondary] parameter determines the content alignment.
   Widget _buildDismissBackground(
     BuildContext context, {
     bool isSecondary = false,
@@ -194,6 +211,10 @@ class TransactionItem extends StatelessWidget {
     );
   }
 
+  /// Shows a confirmation dialog to delete the transaction.
+  ///
+  /// Returns `true` if the user confirms deletion, `false` if canceled,
+  /// or `null` if the dialog is dismissed.
   Future<bool?> _confirmDismiss(BuildContext context) async {
     return await showDialog(
       context: context,
@@ -225,6 +246,10 @@ class TransactionItem extends StatelessWidget {
     );
   }
 
+  /// Handles transaction deletion after confirming the gesture.
+  ///
+  /// Removes the transaction from [FinanceProvider] and shows a
+  /// [SnackBar] with an undo option.
   void _handleDismiss(BuildContext context) {
     Provider.of<FinanceProvider>(
       context,
@@ -252,6 +277,10 @@ class TransactionItem extends StatelessWidget {
     );
   }
 
+  /// Shows complete transaction details in a modal.
+  ///
+  /// Presents detailed information of the [transaction] in a
+  /// [ModalBottomSheet] with options to close or edit.
   void _showTransactionDetails(BuildContext context, Transaction transaction) {
     final isIncome = transaction.type == TransactionType.income;
     final colorScheme = Theme.of(context).colorScheme;
@@ -495,6 +524,10 @@ class TransactionItem extends StatelessWidget {
     );
   }
 
+  /// Builds a detail row with label and value.
+  ///
+  /// Creates a formatted row that displays a [label] and its corresponding
+  /// [value] with appropriate theme styling.
   Widget _buildDetailRow(BuildContext context, String label, Widget value) {
     return Row(
       children: [
@@ -518,8 +551,13 @@ class TransactionItem extends StatelessWidget {
     );
   }
 
+/// Shows the edit form for the transaction.
+///
+/// Presents a [TransactionForm] in a modal to edit the [transaction].
+/// Uses [WidgetsBinding.instance.addPostFrameCallback] to ensure
+/// the context is valid before showing the modal.
 void _showEditForm(BuildContext context, Transaction transaction) {
-  // Esperar al siguiente frame para asegurar contexto válido
+  // Wait for next frame to ensure valid context
   WidgetsBinding.instance.addPostFrameCallback((_) {
     if (!context.mounted) return;
     
