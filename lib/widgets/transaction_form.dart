@@ -80,8 +80,8 @@ class TransactionFormState extends State<TransactionForm> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                widget.transaction == null 
-                    ? 'Nueva Transacción' 
+                widget.transaction == null
+                    ? 'Nueva Transacción'
                     : 'Editar Transacción',
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
@@ -165,19 +165,20 @@ class TransactionFormState extends State<TransactionForm> {
 
   Widget _buildCategoryDropdown(Color surfaceVariantLight) {
     return DropdownButtonFormField<Category>(
-      value: _selectedCategory,
-      items: Category.values.map((category) {
-        return DropdownMenuItem(
-          value: category,
-          child: Row(
-            children: [
-              Icon(category.icon, color: category.color, size: 20),
-              const SizedBox(width: 12),
-              Text(category.name),
-            ],
-          ),
-        );
-      }).toList(),
+      initialValue: _selectedCategory,
+      items:
+          Category.values.map((category) {
+            return DropdownMenuItem(
+              value: category,
+              child: Row(
+                children: [
+                  Icon(category.icon, color: category.color, size: 20),
+                  const SizedBox(width: 12),
+                  Text(category.name),
+                ],
+              ),
+            );
+          }).toList(),
       onChanged: (Category? value) {
         if (value != null && mounted) {
           setState(() => _selectedCategory = value);
@@ -214,7 +215,7 @@ class TransactionFormState extends State<TransactionForm> {
   Widget _buildDateSelector(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    
+
     return InkWell(
       onTap: () => _selectDate(context),
       borderRadius: BorderRadius.circular(12),
@@ -223,9 +224,7 @@ class TransactionFormState extends State<TransactionForm> {
         decoration: BoxDecoration(
           color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: theme.dividerColor.withValues(alpha: 0.0),
-          ),
+          border: Border.all(color: theme.dividerColor.withValues(alpha: 0.0)),
         ),
         child: Row(
           children: [
@@ -251,7 +250,7 @@ class TransactionFormState extends State<TransactionForm> {
 
   Widget _buildSubmitButton(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return ElevatedButton(
       onPressed: _isSubmitting ? null : () => _submitForm(context),
       style: ElevatedButton.styleFrom(
@@ -260,14 +259,15 @@ class TransactionFormState extends State<TransactionForm> {
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
       ),
-      child: _isSubmitting
-          ? const CircularProgressIndicator()
-          : Text(
-              widget.transaction == null
-                  ? 'AGREGAR TRANSACCIÓN'
-                  : 'ACTUALIZAR TRANSACCIÓN',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+      child:
+          _isSubmitting
+              ? const CircularProgressIndicator()
+              : Text(
+                widget.transaction == null
+                    ? 'AGREGAR TRANSACCIÓN'
+                    : 'ACTUALIZAR TRANSACCIÓN',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
     );
   }
 
@@ -320,15 +320,16 @@ class TransactionFormState extends State<TransactionForm> {
       await provider.addTransaction(transaction);
 
       if (!mounted) return;
-      
+
       Navigator.of(context).pop();
-      
+
       if (!mounted) return;
-      
-      final message = widget.transaction == null
-          ? 'Transacción agregada correctamente'
-          : 'Transacción actualizada correctamente';
-      
+
+      final message =
+          widget.transaction == null
+              ? 'Transacción agregada correctamente'
+              : 'Transacción actualizada correctamente';
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(message),

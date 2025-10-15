@@ -15,7 +15,7 @@ void main() async {
   Hive.registerAdapter(TransactionAdapter());
   Hive.registerAdapter(TransactionTypeAdapter());
   Hive.registerAdapter(CategoryAdapter());
-  
+
   runApp(
     MultiProvider(
       providers: [
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
             color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -58,7 +58,8 @@ class MyApp extends StatelessWidget {
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           elevation: 4,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16)),
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
       ),
       darkTheme: ThemeData.dark().copyWith(
@@ -128,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildDateFilterChip(FinanceProvider provider) {
     final filter = provider.dateFilter;
     if (filter == null) return const SizedBox.shrink();
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Chip(
@@ -149,19 +150,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return CustomScrollView(
       slivers: [
-        const SliverToBoxAdapter(
-          child: FinancialSummary(),
-        ),
+        const SliverToBoxAdapter(child: FinancialSummary()),
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final transaction = provider.transactions[index];
-                return TransactionItem(transaction: transaction);
-              },
-              childCount: provider.transactions.length,
-            ),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final transaction = provider.transactions[index];
+              return TransactionItem(transaction: transaction);
+            }, childCount: provider.transactions.length),
           ),
         ),
       ],
@@ -182,7 +178,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _selectDateRange(BuildContext context) async {
-    final financeProvider = Provider.of<FinanceProvider>(context, listen: false);
+    final financeProvider = Provider.of<FinanceProvider>(
+      context,
+      listen: false,
+    );
     final DateTimeRange? picked = await showDateRangePicker(
       context: context,
       firstDate: DateTime(2020),
@@ -199,12 +198,13 @@ class _HomeScreenState extends State<HomeScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (_) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: TransactionForm(transaction: transaction),
-      ),
+      builder:
+          (_) => Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: TransactionForm(transaction: transaction),
+          ),
     );
   }
 }
