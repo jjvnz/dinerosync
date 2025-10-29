@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 
 import '../providers/finance_provider.dart';
 import '../widgets/new_transaction_item.dart';
-import '../widgets/transaction_form.dart';
 
 class TransactionsScreen extends StatefulWidget {
   const TransactionsScreen({super.key});
@@ -475,14 +474,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     );
   }
 
-  void _showAddTransactionSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => const TransactionForm(),
-    );
-  }
+
 
   void _handleFilterSelection(String value, FinanceProvider provider) {
     // Implement filter logic based on selection
