@@ -1,191 +1,166 @@
 import 'package:dinerosync/models/category.dart';
 import 'package:dinerosync/models/transaction.dart';
 import 'package:dinerosync/providers/finance_provider.dart';
+import 'package:dinerosync/utils/number_formatter.dart';
+import 'package:dinerosync/widgets/category_selector.dart';
+import 'package:dinerosync/widgets/custom_keypad.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-/// Form widget for creating and editing transactions.
-///
-/// Provides input fields for amount, description, category, type, and date.
-/// When [transaction] is provided, the form operates in edit mode,
-/// otherwise it creates a new transaction.
 class TransactionForm extends StatefulWidget {
-  /// The transaction to edit, or null to create a new one.
   final Transaction? transaction;
-
-  /// Creates a new transaction form.
-  ///
-  /// If [transaction] is provided, the form will be pre-filled with
-  /// the transaction's data for editing.
   const TransactionForm({super.key, this.transaction});
 
   @override
-  TransactionFormState createState() => TransactionFormState();
+  State<TransactionForm> createState() => _TransactionFormState();
 }
 
-/// State class for [TransactionForm].
-///
-/// Manages form validation, input formatting, and transaction submission.
-class TransactionFormState extends State<TransactionForm> {
-  /// Form key for validation.
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  
-  /// Controller for the amount input field.
-  final TextEditingController _amountController = TextEditingController();
-  
-  /// Controller for the description input field.
-  final TextEditingController _descriptionController = TextEditingController();
-  
-  /// Currently selected transaction type.
+class _TransactionFormState extends State<TransactionForm> {
+  final _descriptionController = TextEditingController();
   TransactionType _selectedType = TransactionType.expense;
-  
-  /// Currently selected category.
   Category _selectedCategory = Category.food;
-  
-  /// Currently selected date and time.
   DateTime _selectedDate = DateTime.now();
-  
-  /// Whether the form is currently being submitted.
-  bool _isSubmitting = false;
-  
-  /// Number formatter for currency display.
-  final NumberFormat _currencyFormat = NumberFormat.decimalPattern('es_ES');
+  String _amountString = '0';
 
-  /// Initializes the form state.
-  ///
-  /// Sets up form fields and adds listeners for amount formatting.
   @override
   void initState() {
     super.initState();
-    _updateFormFields();
-    _amountController.addListener(_formatAmount);
-  }
-
-  /// Formats the amount input as the user types.
-  ///
-  /// Applies currency formatting to maintain consistent number display.
-  void _formatAmount() {
-    final String text = _amountController.text;
-
-    if (text.isEmpty) {
-      return;
-    }
-
-    try {
-      final double value = _currencyFormat.parse(text).toDouble();
-      final String formattedText = _currencyFormat.format(value);
-
-      if (text != formattedText) {
-        _amountController.value = TextEditingValue(
-          text: formattedText,
-          selection: TextSelection.collapsed(offset: formattedText.length),
-        );
-      }
-    } catch (e) {
-      // Ignore temporary input errors.
+    if (widget.transaction != null) {
+      final t = widget.transaction!;
+      _selectedType = t.type;
+      _selectedCategory = t.category;
+      _selectedDate = t.date;
+      _amountString = t.amount.toStringAsFixed(2);
+      _descriptionController.text = t.description;
     }
   }
 
-  /// Updates form fields with transaction data.
-  ///
-  /// Populates all form fields when editing an existing transaction,
-  /// or clears them when creating a new one.
-  void _updateFormFields() {
-    final transaction = widget.transaction;
-    if (transaction != null) {
-      _selectedType = transaction.type;
-      _selectedCategory = transaction.category;
-      _selectedDate = transaction.date;
-      _amountController.text = _currencyFormat.format(transaction.amount);
-      _descriptionController.text = transaction.description;
-    } else {
-      _amountController.clear();
-      _descriptionController.clear();
-    }
-  }
-
-  /// Updates form fields when the widget is rebuilt with different data.
-  ///
-  /// Refreshes form fields if the [transaction] property changes.
-  @override
-  void didUpdateWidget(covariant TransactionForm oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.transaction != oldWidget.transaction) {
-      _updateFormFields();
-    }
-  }
-
-  /// Cleans up resources when the widget is disposed.
-  ///
-  /// Removes listeners and disposes of text controllers.
   @override
   void dispose() {
-    _amountController.removeListener(_formatAmount);
-    _amountController.dispose();
     _descriptionController.dispose();
     super.dispose();
   }
 
-  /// Builds the transaction form interface.
-  ///
-  /// Creates a scrollable form with input fields for all transaction
-  /// properties and handles form submission.
+  void _onKeyPressed(String key) {
+    setState(() {
+      if (key == 'backspace') {
+        if (_amountString.length > 1) {
+          _amountString = _amountString.substring(0, _amountString.length - 1);
+        } else {
+          _amountString = '0';
+        }
+      } else {
+        if (_amountString == '0' && key != '.') {
+          _amountString = key;
+        } else {
+          _amountString += key;
+        }
+      }
+    });
+  }
+
+  double get _amount {
+    try {
+      return double.parse(_amountString);
+    } catch (e) {
+      return 0.0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final surfaceVariant = colorScheme.surfaceContainerHighest;
-    final surfaceVariantLight = Color.alphaBlend(
-      surfaceVariant.withAlpha(100),
-      colorScheme.surface,
-    );
+    return DraggableScrollableSheet(
+      initialChildSize: 0.95,
+      maxChildSize: 0.95,
+      minChildSize: 0.5,
+      expand: false,
+      builder: (_, controller) => Container(
+        decoration: BoxDecoration(
+          color: theme.scaffoldBackgroundColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        // --- NUEVA ESTRUCTURA CLAVE ---
+        child: Column(
+          mainAxisSize: MainAxisSize.min, // Ocupa el mínimo espacio posible
+          children: [
+            // 1. Header (tamaño fijo)
+            _buildHeader(context),
 
-    return PopScope(
-      canPop: !_isSubmitting,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                widget.transaction == null
-                    ? 'Nueva Transacción'
-                    : 'Editar Transacción',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
+            // 2. Contenido desplazable (ocupa el espacio disponible)
+            Expanded(
+              child: ListView(
+                controller: controller,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  _buildAmountDisplay(theme),
+                  const SizedBox(height: 24),
+                  _buildTypeSelector(theme),
+                  const SizedBox(height: 24),
+                  CategorySelector(
+                    selectedCategory: _selectedCategory,
+                    onCategorySelected: (cat) =>
+                        setState(() => _selectedCategory = cat),
+                  ),
+                  const SizedBox(height: 24),
+                  _buildDetailsSection(theme),
+                  const SizedBox(
+                    height: 16,
+                  ), // Padding para que no toque el teclado
+                ],
               ),
-              const SizedBox(height: 24),
-              _buildTypeSelector(surfaceVariant),
-              const SizedBox(height: 20),
-              _buildAmountField(surfaceVariantLight),
-              const SizedBox(height: 16),
-              _buildCategoryDropdown(surfaceVariantLight),
-              const SizedBox(height: 16),
-              _buildDescriptionField(surfaceVariantLight),
-              const SizedBox(height: 16),
-              _buildDateSelector(context),
-              const SizedBox(height: 24),
-              _buildSubmitButton(context),
-              const SizedBox(height: 8),
-            ],
-          ),
+            ),
+
+            // 3. Teclado numérico (tamaño fijo en la parte inferior)
+            CustomKeypad(
+              onKeyPressed: _onKeyPressed,
+              onSubmit: () => _submitForm(context),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  /// Builds the transaction type selector.
-  ///
-  /// Creates a segmented button to choose between income and expense
-  /// with appropriate colors for each type.
-  Widget _buildTypeSelector(Color surfaceVariant) {
+  Widget _buildHeader(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.close),
+          ),
+          Text(
+            widget.transaction == null
+                ? 'Nueva Transacción'
+                : 'Editar Transacción',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(width: 48),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAmountDisplay(ThemeData theme) {
+    return Column(
+      children: [
+        Text(
+          '\$${NumberFormatter.formatCurrency(_amount).replaceAll('\$', '')}',
+          style: theme.textTheme.displayLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: theme.colorScheme.onSurface,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTypeSelector(ThemeData theme) {
     return SegmentedButton<TransactionType>(
       segments: const [
         ButtonSegment(
@@ -201,9 +176,7 @@ class TransactionFormState extends State<TransactionForm> {
       ],
       selected: {_selectedType},
       onSelectionChanged: (Set<TransactionType> newSelection) {
-        if (newSelection.isNotEmpty && mounted) {
-          setState(() => _selectedType = newSelection.first);
-        }
+        setState(() => _selectedType = newSelection.first);
       },
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
@@ -212,246 +185,84 @@ class TransactionFormState extends State<TransactionForm> {
                 ? Colors.green.withValues(alpha: 0.1)
                 : Colors.red.withValues(alpha: 0.1);
           }
-          return surfaceVariant;
+          return theme.colorScheme.surfaceContainerHighest;
         }),
       ),
     );
   }
 
-  /// Builds the amount input field.
-  ///
-  /// Creates a validated text field with currency formatting and
-  /// numeric keyboard input.
-  Widget _buildAmountField(Color surfaceVariantLight) {
-    return TextFormField(
-      controller: _amountController,
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      decoration: InputDecoration(
-        labelText: 'Monto',
-        prefixText: '\$ ',
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        fillColor: surfaceVariantLight,
-        filled: true,
-        suffixIcon: const Icon(Icons.attach_money),
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) return 'Ingrese un monto';
-        try {
-          final amount = _currencyFormat.parse(value).toDouble();
-          if (amount <= 0) return 'El monto debe ser mayor a cero';
-        } catch (e) {
-          return 'Monto inválido';
-        }
-        return null;
-      },
-    );
-  }
-
-  /// Builds the category selection dropdown.
-  ///
-  /// Creates a dropdown with all available categories, showing
-  /// icons and names for each option.
-  Widget _buildCategoryDropdown(Color surfaceVariantLight) {
-    return DropdownButtonFormField<Category>(
-      initialValue: _selectedCategory,
-      items:
-          Category.values.map((category) {
-            return DropdownMenuItem(
-              value: category,
-              child: Row(
-                children: [
-                  Icon(category.icon, color: category.color, size: 20),
-                  const SizedBox(width: 12),
-                  Text(category.name),
-                ],
-              ),
-            );
-          }).toList(),
-      onChanged: (Category? value) {
-        if (value != null && mounted) {
-          setState(() => _selectedCategory = value);
-        }
-      },
-      decoration: InputDecoration(
-        labelText: 'Categoría',
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        fillColor: surfaceVariantLight,
-        filled: true,
-      ),
-    );
-  }
-
-  /// Builds the description input field.
-  ///
-  /// Creates a validated text field for transaction description
-  /// with character limit and minimum length validation.
-  Widget _buildDescriptionField(Color surfaceVariantLight) {
-    return TextFormField(
-      controller: _descriptionController,
-      decoration: InputDecoration(
-        labelText: 'Descripción',
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        fillColor: surfaceVariantLight,
-        filled: true,
-        suffixIcon: const Icon(Icons.description),
-      ),
-      maxLength: 100,
-      validator: (value) {
-        if (value == null || value.isEmpty) return 'Ingrese una descripción';
-        if (value.length < 3) return 'Mínimo 3 caracteres';
-        return null;
-      },
-    );
-  }
-
-  /// Builds the date and time selector.
-  ///
-  /// Creates a tappable container that shows the selected date
-  /// and opens a date picker when tapped.
-  Widget _buildDateSelector(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return InkWell(
-      onTap: () => _selectDate(context),
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+  Widget _buildDetailsSection(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Descripción', style: theme.textTheme.titleMedium),
+        const SizedBox(height: 8),
+        TextField(
+          controller: _descriptionController,
+          decoration: const InputDecoration(hintText: '¿Qué fue esto?'),
+        ),
+        const SizedBox(height: 16),
+        Text('Fecha', style: theme.textTheme.titleMedium),
+        const SizedBox(height: 8),
+        InkWell(
+          onTap: () => _selectDate(context),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: theme.dividerColor.withValues(alpha: 0.0)),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(DateFormat('dd MMMM yyyy').format(_selectedDate)),
+                Icon(
+                  Icons.calendar_month,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                ),
+              ],
+            ),
+          ),
         ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.calendar_today,
-              color: colorScheme.onSurface.withValues(alpha: 0.6),
-            ),
-            const SizedBox(width: 16),
-            Text(
-              DateFormat('dd MMMM yyyy, HH:mm').format(_selectedDate),
-              style: theme.textTheme.bodyMedium,
-            ),
-            const Spacer(),
-            Icon(
-              Icons.edit,
-              color: colorScheme.onSurface.withValues(alpha: 0.3),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// Builds the form submission button.
-  ///
-  /// Creates an elevated button that validates and submits the form,
-  /// with loading state during submission.
-  Widget _buildSubmitButton(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return ElevatedButton(
-      onPressed: _isSubmitting ? null : () => _submitForm(context),
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        backgroundColor: colorScheme.primary,
-        foregroundColor: colorScheme.onPrimary,
-      ),
-      child:
-          _isSubmitting
-              ? const CircularProgressIndicator()
-              : Text(
-                widget.transaction == null
-                    ? 'AGREGAR TRANSACCIÓN'
-                    : 'ACTUALIZAR TRANSACCIÓN',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
+      ],
     );
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
       firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
     );
-
-    if (pickedDate == null || !mounted) return;
-
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(_selectedDate),
-    );
-
-    if (pickedTime != null && mounted) {
-      setState(() {
-        _selectedDate = DateTime(
-          pickedDate.year,
-          pickedDate.month,
-          pickedDate.day,
-          pickedTime.hour,
-          pickedTime.minute,
-        );
-      });
+    if (picked != null) {
+      setState(() => _selectedDate = picked);
     }
   }
 
   Future<void> _submitForm(BuildContext context) async {
-    final formState = _formKey.currentState;
-    if (formState == null || !formState.validate()) return;
-
-    setState(() => _isSubmitting = true);
-
-    try {
-      final amount = _currencyFormat.parse(_amountController.text).toDouble();
-      final transaction = Transaction(
-        id: widget.transaction?.id ?? const Uuid().v4(),
-        type: _selectedType,
-        amount: amount,
-        category: _selectedCategory,
-        description: _descriptionController.text,
-        date: _selectedDate,
-      );
-
-      final provider = Provider.of<FinanceProvider>(context, listen: false);
-      await provider.addTransaction(transaction);
-
-      if (!mounted) return;
-
-      Navigator.of(context).pop();
-
-      if (!mounted) return;
-
-      final message =
-          widget.transaction == null
-              ? 'Transacción agregada correctamente'
-              : 'Transacción actualizada correctamente';
-
+    if (_amount == 0 || _descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
+        const SnackBar(
+          content: Text('Por favor, completa el monto y la descripción.'),
         ),
       );
-    } catch (e) {
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error al guardar: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } finally {
-      if (mounted) {
-        setState(() => _isSubmitting = false);
-      }
+      return;
     }
+
+    final transaction = Transaction(
+      id: widget.transaction?.id ?? const Uuid().v4(),
+      type: _selectedType,
+      amount: _amount,
+      category: _selectedCategory,
+      description: _descriptionController.text,
+      date: _selectedDate,
+    );
+
+    final provider = Provider.of<FinanceProvider>(context, listen: false);
+    final navigator = Navigator.of(context);
+    await provider.addTransaction(transaction);
+    if (mounted) navigator.pop();
   }
 }
