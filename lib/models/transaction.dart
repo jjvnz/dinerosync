@@ -12,26 +12,29 @@ class Transaction {
   /// Unique identifier for this transaction.
   @HiveField(0)
   final String id;
-  
+
   /// The type of transaction (income or expense).
   @HiveField(1)
   final TransactionType type;
-  
+
   /// The monetary amount of the transaction.
   @HiveField(2)
   final double amount;
-  
+
   /// The category this transaction belongs to.
   @HiveField(3)
   final Category category;
-  
+
   /// User-provided description of the transaction.
   @HiveField(4)
   final String description;
-  
+
   /// The date and time when the transaction occurred.
   @HiveField(5)
   final DateTime date;
+
+  @HiveField(6)
+  final bool isFavorite;
 
   /// Creates a new transaction.
   ///
@@ -44,6 +47,7 @@ class Transaction {
     required this.category,
     required this.description,
     required this.date,
+    this.isFavorite = false,
   });
 }
 
@@ -56,8 +60,8 @@ enum TransactionType {
   /// Money received or earned.
   @HiveField(0)
   income,
-  
+
   /// Money spent or paid out.
   @HiveField(1)
-  expense
+  expense,
 }
