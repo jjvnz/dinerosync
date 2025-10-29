@@ -1,20 +1,83 @@
 # 💸 Dinerosync
 
-**Dinerosync** is a modern **personal finance mobile app** built with **Flutter** that helps users **record, visualize, and manage** their income and expenses effortlessly.
-It combines simplicity, elegance, and real-time interactivity — designed to make financial tracking intuitive and enjoyable.
+**Dinerosync** is a modern and elegant personal finance mobile app built with **Flutter**. It's designed to help users record, visualize, and manage their income and expenses intuitively and enjoyably.
+
+It combines simplicity, a polished design, and a robust architecture to make financial tracking a frictionless experience.
 
 ---
 
 ## ✨ Key Features
 
-| Category                 | Description                                   |
-| ------------------------ | --------------------------------------------- |
-| 💰 **Transactions**      | Record income and expenses quickly and easily |
-| 📅 **Filtering**         | View transactions by custom date ranges       |
-| 📊 **Analytics**         | Interactive summaries and visual charts       |
-| 💾 **Offline Storage**   | Secure local persistence powered by Hive      |
-| 🌓 **Themes**            | Light & dark mode for comfort and style       |
-| 🔄 **Real-Time Updates** | State management using Provider               |
+| Category | Description |
+| :--- | :--- |
+| 💰 **Full Transaction Management** | Create, edit, and delete transactions with an intuitive form, swipe-to-action gestures, and a custom numeric keypad. |
+| 📊 **Interactive Visual Analytics** | Explore your finances with dynamic Syncfusion charts, category summaries, and cash flow analysis. |
+| 🧠 **Smart Insights** | Receive personalized financial advice based on your spending patterns, month-over-month comparisons, and more. |
+| 🎨 **High-Quality UI/UX** | Enjoy a cohesive and beautiful user experience with smooth animations, haptic feedback, and an adaptive design. |
+| 💾 **Full Offline Support** | Your data is stored locally and securely with Hive, so the app works perfectly without an internet connection. |
+| 🌓 **Adaptive Themes** | Enjoy light and dark modes that automatically adjust to your system for comfort. |
+| 🔄 **Real-Time Updates** | State management with Provider ensures the UI updates instantly with every change. |
+
+---
+
+## 🧰 Tech Stack
+
+| Technology | Purpose |
+| :--- | :--- |
+| 🐦 [**Flutter**](https://flutter.dev/) | Cross-platform UI framework. |
+| 📦 [**Hive**](https://github.com/hivedb/hive) | Lightweight and fast NoSQL local database. |
+| 🔗 [**Provider**](https://pub.dev/packages/provider) | Reactive and centralized state management. |
+| 📈 [**Syncfusion Charts**](https://www.syncfusion.com/flutter-widgets/charts) | Library for interactive charts and data visualization. |
+| 🌍 [**intl**](https://pub.dev/packages/intl) | Date and currency formatting. |
+| 🎨 [**Local Fonts (Inter)**](https://fonts.google.com/specimen/Inter) | Bundled typography for instant performance and visual consistency. |
+| 🧩 [**uuid**](https://pub.dev/packages/uuid) | Unique identifier generation. |
+
+---
+
+## 🏗️ Project Structure
+
+```
+dinerosync/
+├── lib/
+│   ├── models/           # Data models (Transaction, Category, etc.)
+│   │   ├── transaction.dart
+│   │   └── category.dart
+│   ├── providers/        # Business logic and state (FinanceProvider)
+│   │   └── finance_provider.dart
+│   ├── screens/          # Main application screens
+│   │   ├── dashboard_screen.dart
+│   │   ├── transactions_screen.dart
+│   │   ├── summary_screen.dart
+│   │   └── profile_screen.dart
+│   ├── widgets/          # Reusable UI components
+│   │   ├── transaction_form.dart
+│   │   ├── category_selector.dart
+│   │   ├── new_transaction_item.dart
+│   │   └── custom_date_range_picker.dart
+│   ├── utils/            # Utilities (number formatting, etc.)
+│   │   └── number_formatter.dart
+│   └── main.dart         # App entry point
+├── assets/
+│   └── fonts/            # Local font files
+└── pubspec.yaml
+```
+
+---
+
+## 🎨 UI & Architecture Highlights
+
+### 📱 Main Screens
+
+*   **Dashboard:** A dynamic command center with your balance, daily changes, and "Smart Insights."
+*   **Transactions:** A complete list grouped by day, with gestures for quick editing or deletion.
+*   **Summary:** Visualize your data with pie and line charts, filtered by custom time periods.
+*   **Transaction Form:** A redesigned data entry experience with a hero amount display, animated type selector, and integrated keypad.
+
+### ⚙️ Architectural Strengths
+
+*   **Robust Navigation Model:** Uses a `_NavigationItem` model to eliminate indexing errors and make navigation scalable and maintainable.
+*   **Centralized State:** The `FinanceProvider` contains all business logic (CRUD, filtering, calculations), keeping the UI clean and reactive.
+*   **Reusable Components:** The UI is built on highly reusable widgets like `CategorySelector` and `NewTransactionItem`, promoting consistency and code efficiency.
 
 ---
 
@@ -44,63 +107,12 @@ flutter run
 
 ---
 
-## 🧰 Tech Stack
-
-| Technology                                           | Purpose                          |
-| ---------------------------------------------------- | -------------------------------- |
-| 🐦 [**Flutter**](https://flutter.dev/)               | Cross-platform UI framework      |
-| 📦 [**Hive**](https://github.com/isar/hive)          | Lightweight NoSQL local database |
-| 🔗 [**Provider**](https://pub.dev/packages/provider) | State management                 |
-| 🌍 [**intl**](https://pub.dev/packages/intl)         | Date and currency formatting     |
-
----
-
-## 📁 Project Structure
-
-```
-dinerosync/
-├── models/           # Data models (Transaction, Category, etc.)
-├── providers/        # State management logic (FinanceProvider)
-├── widgets/          # Reusable UI components
-└── main.dart         # App entry point
-```
-
----
-
-## 🎨 UI Showcase
-
-### 📱 Main Screens
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/30e98b3f-032d-4e93-b4f2-5364495007f0" width="45%" alt="Main UI">
-</p>
-
-### 💰 Transaction Flow
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/36eea6e6-9260-4af0-865d-32febfd75e92" width="45%" alt="Transaction UI">
-</p>
-
-### 📊 Dashboard Analytics
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/1723e01c-10f3-4dec-a274-bcafdb006548" width="45%" alt="Dashboard UI">
-</p>
-
-### ⚙️ Settings & Profile
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/48c5fc69-1eb0-48fa-aea3-57a9f4a23cfc" width="45%" alt="Settings UI">
-</p>
-
----
-
 ## 📈 Future Enhancements
 
-* 🔐 Authentication & Cloud Sync
-* 🌐 Multi-language Support
-* 💳 Budgeting & Goal Tracking
-* ☁️ Firebase integration
+* 🔐 **Authentication & Cloud Sync:** Allow users to save and sync their data across multiple devices.
+* 🌐 **Multi-language Support:** Extend the app to support different languages.
+* 💳 **Budgeting & Goal Tracking:** Allow users to set budgets and savings goals.
+* ☁️ **Firebase Integration:** For a complete backend-as-a-service solution.
 
 ---
 
@@ -108,11 +120,11 @@ dinerosync/
 
 Contributions are welcome!
 
-1. Fork the repo
-2. Create a feature branch: `git checkout -b feature/your-feature`
-3. Commit changes: `git commit -m "Add your feature"`
-4. Push the branch: `git push origin feature/your-feature`
-5. Open a Pull Request 🎉
+1.  Fork the repository.
+2.  Create a feature branch: `git checkout -b feature/your-feature`.
+3.  Commit your changes: `git commit -m "Add your feature"`.
+4.  Push to the branch: `git push origin feature/your-feature`.
+5.  Open a Pull Request 🎉
 
 ---
 
@@ -124,5 +136,3 @@ See the [LICENSE](LICENSE) file for more details.
 ---
 
 ### ❤️ Built with Flutter by [@jjvnz](https://github.com/jjvnz)
-
-Would you like me to format this for **GitHub badges** (e.g., Flutter version, License, Stars, Last Commit) at the top for extra polish?
