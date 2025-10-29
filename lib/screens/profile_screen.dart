@@ -161,15 +161,10 @@ class ProfileScreen extends StatelessWidget {
           children: [
             ListTile(
               title: const Text('Claro'),
-              leading: Radio<ThemeMode>(
-                value: ThemeMode.light,
-                groupValue: Theme.of(context).brightness == Brightness.light
-                    ? ThemeMode.light
-                    : ThemeMode.dark,
-                onChanged: (value) {
-                  // Implement theme change here
-                  Navigator.pop(ctx);
-                },
+              leading: Icon(
+                Theme.of(context).brightness == Brightness.light
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
               ),
               onTap: () {
                 // Implement theme change here
@@ -178,15 +173,10 @@ class ProfileScreen extends StatelessWidget {
             ),
             ListTile(
               title: const Text('Oscuro'),
-              leading: Radio<ThemeMode>(
-                value: ThemeMode.dark,
-                groupValue: Theme.of(context).brightness == Brightness.light
-                    ? ThemeMode.light
-                    : ThemeMode.dark,
-                onChanged: (value) {
-                  // Implement theme change here
-                  Navigator.pop(ctx);
-                },
+              leading: Icon(
+                Theme.of(context).brightness == Brightness.dark
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
               ),
               onTap: () {
                 // Implement theme change here

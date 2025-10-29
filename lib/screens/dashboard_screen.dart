@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../providers/finance_provider.dart';
 import '../utils/number_formatter.dart';
-import '../models/insight.dart'; // <-- Importar el nuevo modelo
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
