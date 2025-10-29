@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../providers/finance_provider.dart';
 import '../utils/number_formatter.dart';
@@ -42,28 +41,29 @@ class DashboardScreen extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context, ThemeData theme) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CircleAvatar(
-          backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
-          child: Icon(Icons.person, color: theme.colorScheme.primary),
-        ),
+        // CircleAvatar(
+        //   backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
+        //   child: Icon(Icons.person, color: theme.colorScheme.primary),
+        // ),
         Text(
-          'Buenos días, Jair', // Esto puede volverse dinámico más adelante
-          style: GoogleFonts.inter(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: theme.colorScheme.onSurface,
+          'DineroSync',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: theme.colorScheme.primary,
           ),
         ),
-        IconButton(
-          icon: const Icon(Icons.notifications_outlined),
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Próximamente: Notificaciones')),
-            );
-          },
-        ),
+        // IconButton(
+        //   icon: const Icon(Icons.notifications_outlined),
+        //   onPressed: () {
+        //     ScaffoldMessenger.of(context).showSnackBar(
+        //       const SnackBar(content: Text('Próximamente: Notificaciones')),
+        //     );
+        //   },
+        // ),
       ],
     );
   }
@@ -89,12 +89,17 @@ class DashboardScreen extends StatelessWidget {
         children: [
           Text(
             'Balance Total',
-            style: GoogleFonts.inter(color: Colors.white70, fontSize: 16),
+            style: TextStyle(
+              fontFamily: 'Inter',
+              color: Colors.white70,
+              fontSize: 16,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             NumberFormatter.formatCurrency(provider.balance),
-            style: GoogleFonts.inter(
+            style: TextStyle(
+              fontFamily: 'Inter',
               color: Colors.white,
               fontSize: 40,
               fontWeight: FontWeight.bold,
@@ -113,7 +118,8 @@ class DashboardScreen extends StatelessWidget {
               const SizedBox(width: 4),
               Text(
                 '${todayChange >= 0 ? '+' : ''}${NumberFormatter.formatCurrency(todayChange)} hoy',
-                style: GoogleFonts.inter(
+                style: TextStyle(
+                  fontFamily: 'Inter',
                   color: todayChange >= 0
                       ? Colors.lightGreenAccent
                       : Colors.redAccent,
@@ -145,7 +151,11 @@ class DashboardScreen extends StatelessWidget {
       children: [
         Text(
           'Tus Flujos de Gasto',
-          style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 16),
         Container(
@@ -188,7 +198,10 @@ class DashboardScreen extends StatelessWidget {
                         const SizedBox(width: 12),
                         Text(
                           category.toString().split('.').last,
-                          style: GoogleFonts.inter(fontWeight: FontWeight.w500),
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ],
                     ),
@@ -196,7 +209,10 @@ class DashboardScreen extends StatelessWidget {
                       children: [
                         Text(
                           NumberFormatter.formatCurrency(amount),
-                          style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                         const SizedBox(width: 12),
                         SizedBox(
@@ -239,7 +255,11 @@ class DashboardScreen extends StatelessWidget {
       children: [
         Text(
           'Insights Inteligentes',
-          style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 16),
         ...insights.map(
@@ -264,7 +284,11 @@ class DashboardScreen extends StatelessWidget {
       children: [
         Text(
           title,
-          style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 16),
         Container(
@@ -284,7 +308,8 @@ class DashboardScreen extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 message,
-                style: GoogleFonts.inter(
+                style: TextStyle(
+                  fontFamily: 'Inter',
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
                 textAlign: TextAlign.center,
@@ -344,12 +369,16 @@ class _InsightCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   description,
-                  style: GoogleFonts.inter(
+                  style: TextStyle(
+                    fontFamily: 'Inter',
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     fontSize: 14,
                   ),

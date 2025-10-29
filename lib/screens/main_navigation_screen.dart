@@ -3,7 +3,7 @@ import 'dashboard_screen.dart';
 import '../widgets/transaction_form.dart';
 import 'transactions_screen.dart';
 import 'summary_screen.dart';
-import 'profile_screen.dart';
+// import 'profile_screen.dart';
 
 // --- MODELO DE NAVEGACIÓN ---
 // Define cada elemento de nuestra navegación de forma clara y explícita.
@@ -57,11 +57,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       icon: Icons.pie_chart,
       label: 'Resumen',
     ),
-    _NavigationItem(
-      screen: ProfileScreen(),
-      icon: Icons.person,
-      label: 'Perfil',
-    ),
+    // _NavigationItem(
+    //   screen: ProfileScreen(),
+    //   icon: Icons.person,
+    //   label: 'Perfil',
+    // ),
   ];
 
   @override

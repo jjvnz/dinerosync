@@ -1,7 +1,7 @@
 import 'package:dinerosync/models/transaction.dart';
 import 'package:dinerosync/utils/number_formatter.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 
 import '../providers/finance_provider.dart';
@@ -17,7 +17,7 @@ class TransactionsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Transacciones',
-          style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+          style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
@@ -71,11 +71,12 @@ class TransactionsScreen extends StatelessWidget {
       tilePadding: const EdgeInsets.symmetric(horizontal: 16),
       title: Text(
         dateKey,
-        style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16),
+        style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.bold, fontSize: 16),
       ),
       subtitle: Text(
         '${dayTotal >= 0 ? '+' : ''}${NumberFormatter.formatCurrency(dayTotal)}',
-        style: GoogleFonts.inter(
+        style: TextStyle(
+          fontFamily: 'Inter',
           color: dayTotal >= 0 ? Colors.green : Colors.red,
           fontWeight: FontWeight.w600,
         ),
@@ -106,7 +107,8 @@ class TransactionsScreen extends StatelessWidget {
             const SizedBox(height: 24),
             Text(
               '¡Aquí aparecerán tus transacciones!',
-              style: GoogleFonts.inter(
+              style: TextStyle(
+                fontFamily: 'Inter',
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -115,7 +117,8 @@ class TransactionsScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'Empieza a registrar tus gastos e ingresos para ver tu actividad financiera.',
-              style: GoogleFonts.inter(
+              style: TextStyle(
+                fontFamily: 'Inter',
                 color: Theme.of(
                   context,
                 ).colorScheme.onSurface.withValues(alpha: 0.7),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -25,7 +25,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
       appBar: AppBar(
         title: Text(
           'Resumen',
-          style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+          style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(icon: const Icon(Icons.account_circle), onPressed: () {}),
@@ -80,14 +80,15 @@ class _SummaryScreenState extends State<SummaryScreen> {
         children: [
           Text(
             'Balance Total',
-            style: GoogleFonts.inter(
+            style: TextStyle(
+              fontFamily: 'Inter',
               color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             NumberFormatter.formatCurrency(provider.balance),
-            style: GoogleFonts.inter(fontSize: 40, fontWeight: FontWeight.bold),
+            style: TextStyle(fontFamily: 'Inter', fontSize: 40, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -101,7 +102,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
       children: [
         Text(
           'Período de Análisis',
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+          style: TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 12),
         SingleChildScrollView(
@@ -117,7 +118,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   onSelected: (_) => _onFilterSelected(filter),
                   backgroundColor: theme.colorScheme.surfaceContainerHighest,
                   selectedColor: theme.colorScheme.primary,
-                  labelStyle: GoogleFonts.inter(
+                  labelStyle: TextStyle(
+                    fontFamily: 'Inter',
                     color: isSelected
                         ? Colors.white
                         : theme.colorScheme.onSurface,
@@ -167,7 +169,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
           legend: Legend(
             isVisible: true,
             overflowMode: LegendItemOverflowMode.wrap,
-            textStyle: GoogleFonts.inter(fontSize: 12),
+            textStyle: TextStyle(fontFamily: 'Inter', fontSize: 12),
           ),
           series: <DoughnutSeries<ChartData, String>>[
             DoughnutSeries<ChartData, String>(
@@ -210,10 +212,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
         height: 200,
         child: SfCartesianChart(
           primaryXAxis: CategoryAxis(
-            labelStyle: GoogleFonts.inter(fontSize: 10),
+            labelStyle: TextStyle(fontFamily: 'Inter', fontSize: 10),
           ),
           primaryYAxis: NumericAxis(
-            labelStyle: GoogleFonts.inter(fontSize: 10),
+            labelStyle: TextStyle(fontFamily: 'Inter', fontSize: 10),
           ),
           series: <SplineSeries<CashFlowData, String>>[
             SplineSeries<CashFlowData, String>(
@@ -246,12 +248,12 @@ class _SummaryScreenState extends State<SummaryScreen> {
         children: [
           Text(
             title,
-            style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w500),
+            style: TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
           Text(
             amount,
-            style: GoogleFonts.inter(fontSize: 32, fontWeight: FontWeight.bold),
+            style: TextStyle(fontFamily: 'Inter', fontSize: 32, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
           child,

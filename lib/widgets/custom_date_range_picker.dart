@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:intl/intl.dart';
 
 class CustomDateRangePicker extends StatefulWidget {
@@ -60,7 +60,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
           ),
           Text(
             'Seleccionar Rango de Fechas',
-            style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(width: 48), // Spacer
         ],
@@ -86,7 +86,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
           ),
           Text(
             DateFormat('MMMM yyyy', 'es_ES').format(_currentMonth),
-            style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+            style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600),
           ),
           IconButton(
             onPressed: _nextMonth,
@@ -151,7 +151,8 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
           child: Center(
             child: Text(
               day,
-              style: GoogleFonts.inter(
+              style: TextStyle(
+                fontFamily: 'Inter',
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
@@ -192,7 +193,8 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
         child: Center(
           child: Text(
             '${date.day}',
-            style: GoogleFonts.inter(
+            style: TextStyle(
+              fontFamily: 'Inter',
               color: textColor,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),

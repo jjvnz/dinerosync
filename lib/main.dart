@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
@@ -49,15 +48,16 @@ class MyApp extends StatelessWidget {
           surface: backgroundLight,
         ),
         useMaterial3: true,
-        textTheme: GoogleFonts.interTextTheme(),
+        textTheme: const TextTheme().apply(fontFamily: 'Inter'),
         appBarTheme: AppBarTheme(
           centerTitle: true,
           elevation: 0,
           backgroundColor: backgroundLight,
-          titleTextStyle: GoogleFonts.inter(
+          titleTextStyle: const TextStyle(
+            fontFamily: 'Inter',
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: const Color(0xFF1E2A32),
+            color: Color(0xFF1E2A32),
           ),
         ),
         cardTheme: CardThemeData(
@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             padding: const EdgeInsets.symmetric(vertical: 16),
-            textStyle: GoogleFonts.inter(fontWeight: FontWeight.bold),
+            textStyle: const TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.bold),
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
@@ -98,12 +98,13 @@ class MyApp extends StatelessWidget {
           surface: backgroundDark,
         ),
         scaffoldBackgroundColor: backgroundDark,
-        textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
+        textTheme: ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
         appBarTheme: AppBarTheme(
           centerTitle: true,
           elevation: 0,
           backgroundColor: backgroundDark,
-          titleTextStyle: GoogleFonts.inter(
+          titleTextStyle: const TextStyle(
+            fontFamily: 'Inter',
             fontSize: 22,
             fontWeight: FontWeight.bold,
             color: Colors.white,

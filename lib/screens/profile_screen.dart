@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -11,7 +10,7 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Perfil',
-          style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+          style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -72,7 +71,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 child: Text(
                   'Cerrar Sesión',
-                  style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                  style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -93,11 +92,12 @@ class ProfileScreen extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           'Jair',
-          style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.bold),
         ),
         Text(
           'jair@example.com',
-          style: GoogleFonts.inter(
+          style: TextStyle(
+            fontFamily: 'Inter',
             color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
@@ -117,7 +117,8 @@ class ProfileScreen extends StatelessWidget {
           padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
           child: Text(
             title,
-            style: GoogleFonts.inter(
+            style: TextStyle(
+              fontFamily: 'Inter',
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
@@ -145,7 +146,7 @@ class ProfileScreen extends StatelessWidget {
         item.icon,
         color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
       ),
-      title: Text(item.title, style: GoogleFonts.inter()),
+      title: Text(item.title, style: TextStyle(fontFamily: 'Inter')),
       trailing: const Icon(Icons.chevron_right),
       onTap: item.onTap,
     );
@@ -198,7 +199,7 @@ class ProfileScreen extends StatelessWidget {
       children: [
         Text(
           'Una app moderna para gestionar tus finanzas personales.',
-          style: GoogleFonts.inter(),
+          style: TextStyle(fontFamily: 'Inter'),
         ),
       ],
     );
@@ -241,5 +242,3 @@ class _SettingsItem {
 
   _SettingsItem({required this.icon, required this.title, required this.onTap});
 }
-
-

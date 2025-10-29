@@ -1,8 +1,10 @@
+import 'package:dinerosync/models/category.dart';
 import 'package:dinerosync/models/transaction.dart';
 import 'package:dinerosync/providers/finance_provider.dart';
 import 'package:dinerosync/utils/number_formatter.dart';
+import 'package:dinerosync/widgets/transaction_form.dart'; // <-- AÑADIR IMPORT
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -33,13 +35,22 @@ class NewTransactionItem extends StatelessWidget {
         icon: Icons.delete,
         label: 'Eliminar',
       ),
+
+      // --- LÓGICA CORREGIDA PARA CONFIRMAR Y EJECUTAR ACCIONES ---
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.endToStart) {
+          // Eliminar
           return await _showDeleteConfirmation(context);
         }
-        // Para otras acciones, no descartamos el ítem
+        if (direction == DismissDirection.startToEnd) {
+          // Editar
+          _navigateToEditForm(context);
+          return false; // No descartar el ítem, solo navegar
+        }
         return false;
       },
+
+      // onDismissed ahora solo se usa para la eliminación real
       onDismissed: (direction) {
         if (direction == DismissDirection.endToStart) {
           Provider.of<FinanceProvider>(
@@ -75,9 +86,9 @@ class NewTransactionItem extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      Icons.category,
-                      color: Colors.grey,
-                    ),
+                      transaction.category.icon,
+                      color: transaction.category.color,
+                    ), // <-- CORREGIDO
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -92,11 +103,13 @@ class NewTransactionItem extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          transaction.category.toString().split('.').last,
+                          transaction.category.name,
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.7,
+                            ),
                           ),
-                        ),
+                        ), // <-- CORREGIDO
                       ],
                     ),
                   ),
@@ -105,7 +118,8 @@ class NewTransactionItem extends StatelessWidget {
                     children: [
                       Text(
                         '${isIncome ? '+' : '-'}${NumberFormatter.formatCurrency(transaction.amount)}',
-                        style: GoogleFonts.inter(
+                        style: TextStyle(
+                          fontFamily: 'Inter',
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: accentColor,
@@ -115,7 +129,9 @@ class NewTransactionItem extends StatelessWidget {
                       Text(
                         DateFormat('HH:mm').format(transaction.date),
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.5,
+                          ),
                         ),
                       ),
                     ],
@@ -125,6 +141,15 @@ class NewTransactionItem extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  // --- NUEVO MÉTODO PARA NAVEGAR A LA EDICIÓN ---
+  void _navigateToEditForm(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => TransactionForm(transaction: transaction),
       ),
     );
   }
@@ -184,7 +209,6 @@ class NewTransactionItem extends StatelessWidget {
   }
 
   void _showDetails(BuildContext context) {
-    // Show transaction details modal
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Detalles de: ${transaction.description}')),
     );
