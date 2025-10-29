@@ -122,9 +122,11 @@ class _TransactionFormState extends State<TransactionForm>
       if (mounted) navigator.pop();
     } catch (e) {
       // Manejo de errores
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al guardar transacción: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al guardar transacción: $e')),
+        );
+      }
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
     }
@@ -309,7 +311,6 @@ class _TransactionFormState extends State<TransactionForm>
     required bool isSelected,
     required Color color,
   }) {
-    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
         if (_selectedType != type) {

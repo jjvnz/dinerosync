@@ -404,6 +404,34 @@ class FinanceProvider with ChangeNotifier {
 
     return generatedInsights;
   }
+
+  /// Gets transactions filtered by the specified filter type.
+  List<Transaction> getTransactionsForFilter(String filter) {
+    final range = _getDateRangeForFilter(filter) ?? _dateFilter;
+    if (range == null) return transactions;
+
+    return transactions
+        .where(
+          (t) =>
+              t.date.isAfter(range.start.subtract(const Duration(days: 1))) &&
+              t.date.isBefore(range.end.add(const Duration(days: 1))),
+        )
+        .toList();
+  }
+
+  double getTotalIncomeForFilter(String filter) {
+    final transactions = getTransactionsForFilter(filter);
+    return transactions
+        .where((t) => t.type == TransactionType.income)
+        .fold(0.0, (sum, t) => sum + t.amount);
+  }
+
+  double getTotalExpensesForFilter(String filter) {
+    final transactions = getTransactionsForFilter(filter);
+    return transactions
+        .where((t) => t.type == TransactionType.expense)
+        .fold(0.0, (sum, t) => sum + t.amount);
+  }
 }
 
 /// Data model for the cash flow chart.

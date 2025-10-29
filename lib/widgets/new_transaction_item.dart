@@ -2,7 +2,7 @@ import 'package:dinerosync/models/category.dart';
 import 'package:dinerosync/models/transaction.dart';
 import 'package:dinerosync/providers/finance_provider.dart';
 import 'package:dinerosync/utils/number_formatter.dart';
-import 'package:dinerosync/widgets/transaction_form.dart'; // <-- AÑADIR IMPORT
+import 'package:dinerosync/widgets/transaction_form.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
